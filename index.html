@@ -13,13 +13,13 @@
 
 <body>
     <header>
-        <div class="titre-entete">
+        <div class="header-title">
             <h1>Quantis - v1</h1>
             <p>Votre gestionnaire de budget !</p>
         </div>
 
-        <div class="controles-entete">
-            <select id="selecteur-mois" disabled>
+        <div class="header-controls">
+            <select id="month-select" disabled>
                 <option value="2026-07">Juillet 2026</option>
                 <option value="2026-08">Août 2026</option>
                 <option value="2026-09" selected>Septembre 2026</option>
@@ -29,60 +29,60 @@
     </header>
 
     <main>
-        <div class="cartes-stats">
-            <section id="carte-solde" class="carte-stat carte-principale">
+        <div class="stats-cards">
+            <section id="balance-card" class="stat-card primary-card">
                 <h2>Solde disponible</h2>
-                <p class="montant-solde solde-positif">
-                    <span id="solde-actuel">0,00 €</span>
+                <p class="stat-amount amount-positive">
+                    <span id="current-balance">0,00 €</span>
                 </p>
             </section>
 
-            <section id="carte-revenus" class="carte-stat">
+            <section id="income-card" class="stat-card">
                 <h2>Revenus du mois</h2>
-                <p class="sous-titre-carte">(Salaire + revenus divers)</p>
-                <p class="montant-solde solde-positif">
-                    <span id="total-revenus">0,00 €</span>
+                <p class="card-subtitle">(Salaire + revenus divers)</p>
+                <p class="stat-amount amount-positive">
+                    <span id="total-income">0,00 €</span>
                 </p>
-                <p class="detail-stat">
+                <p class="stat-detail">
                     <span>dont salaire</span>
-                    <span id="salaire-affiche">0,00 €</span>
+                    <span id="salary-display">0,00 €</span>
                 </p>
             </section>
 
-            <section id="carte-depenses" class="carte-stat">
+            <section id="expenses-card" class="stat-card">
                 <h2>Dépenses du mois</h2>
-                <p class="sous-titre-carte">(Charges fixes + autres dépenses)</p>
-                <p class="montant-solde solde-negatif">
-                    <span id="total-depenses">0,00 €</span>
+                <p class="card-subtitle">(Charges fixes + autres dépenses)</p>
+                <p class="stat-amount amount-negative">
+                    <span id="total-expenses">0,00 €</span>
                 </p>
-                <p class="detail-stat">
+                <p class="stat-detail">
                     <span>Charges fixes</span>
-                    <span id="charges-fixes-total">0,00 €</span>
+                    <span id="fixed-expenses-total">0,00 €</span>
                 </p>
-                <p class="detail-stat">
+                <p class="stat-detail">
                     <span>Autres dépenses</span>
-                    <span id="depenses-mensuelles">0,00 €</span>
+                    <span id="other-expenses">0,00 €</span>
                 </p>
             </section>
         </div>
 
-        <section id="progression-budget">
+        <section id="budget-progress">
             <span>Budget mensuel utilisé</span>
-            <div class="piste-progression">
-                <div class="remplissage" id="remplissage" style="width: 0%;"></div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
             </div>
-            <span id="pourcentage-budget">0 %</span>
+            <span id="budget-percentage">0 %</span>
         </section>
 
-        <div class="colonnes-app">
-            <div class="colonne-gauche">
-                <section id="module-revenus-charges">
+        <div class="app-columns">
+            <div class="left-column">
+                <section id="income-expenses-card">
                     <h2>Revenus et charges fixes</h2>
 
-                    <form id="formulaire-salaire">
+                    <form id="salary-form">
 
-                        <label for="salaire-mensuel">Entrez votre salaire mensuel :</label>
-                        <input type="number" id="salaire-mensuel" name="salaire-mensuel" min="0" step="0.01" required>
+                        <label for="salary-input">Entrez votre salaire mensuel :</label>
+                        <input type="number" id="salary-input" name="salary" min="0" step="0.01" required>
 
                         <button type="submit">Enregistrer le salaire</button>
 
@@ -90,20 +90,20 @@
 
                     <h3>Charges fixes mensuelles</h3>
 
-                    <form id="formulaire-charge">
-                        <div class="ligne-formulaire ligne-formulaire-3">
-                            <div class="champ-formulaire">
-                                <label for="nom-charge">Nom de la charge :</label>
-                                <input type="text" id="nom-charge" name="nom-charge" required>
+                    <form id="fixed-expense-form">
+                        <div class="form-row form-row-3">
+                            <div class="form-field">
+                                <label for="fixed-expense-name">Nom de la charge :</label>
+                                <input type="text" id="fixed-expense-name" name="name" required>
                             </div>
-                            <div class="champ-formulaire">
-                                <label for="montant-charge">Montant :</label>
-                                <input type="number" id="montant-charge" name="montant-charge" min="0.01"
+                            <div class="form-field">
+                                <label for="fixed-expense-amount">Montant :</label>
+                                <input type="number" id="fixed-expense-amount" name="amount" min="0.01"
                                     step="0.01" required>
                             </div>
-                            <div class="champ-formulaire">
-                                <label for="date-charge">Date :</label>
-                                <input type="date" id="date-charge" name="date-charge" required>
+                            <div class="form-field">
+                                <label for="fixed-expense-date">Date :</label>
+                                <input type="date" id="fixed-expense-date" name="date" required>
                             </div>
                         </div>
 
@@ -111,50 +111,50 @@
                     </form>
                 </section>
 
-                <section id="module-liste-charges">
+                <section id="fixed-expenses-card">
                     <h2>Liste des charges fixes</h2>
-                    <p id="message-charges-vide">Aucune charge fixe pour le moment.</p>
-                    <ul id="charges-fixes"></ul>
+                    <p id="fixed-expenses-empty">Aucune charge fixe pour le moment.</p>
+                    <ul id="fixed-expenses-list"></ul>
                 </section>
             </div>
 
-            <div class="colonne-droite">
-                <section id="module-operations">
+            <div class="right-column">
+                <section id="transactions-card">
                     <h2>Opérations du mois</h2>
 
-                    <form id="formulaire-operation">
-                        <div class="ligne-formulaire ligne-formulaire-2">
-                            <div class="champ-formulaire">
-                                <label for="nom-operation">Nom de l'opération :</label>
-                                <input type="text" id="nom-operation" name="nom-operation" required>
+                    <form id="transaction-form">
+                        <div class="form-row form-row-2">
+                            <div class="form-field">
+                                <label for="transaction-name">Nom de l'opération :</label>
+                                <input type="text" id="transaction-name" name="name" required>
                             </div>
-                            <div class="champ-formulaire">
-                                <label for="montant-operation">Montant :</label>
-                                <input type="number" id="montant-operation" name="montant-operation" min="0.01"
+                            <div class="form-field">
+                                <label for="transaction-amount">Montant :</label>
+                                <input type="number" id="transaction-amount" name="amount" min="0.01"
                                     step="0.01" required>
                             </div>
                         </div>
 
-                        <div class="ligne-formulaire ligne-formulaire-3">
-                            <div class="champ-formulaire">
-                                <label for="type-operation">Type :</label>
-                                <select id="type-operation" name="type-operation" required>
-                                    <option value="revenu">Revenu divers</option>
-                                    <option value="depense">Autre dépense</option>
+                        <div class="form-row form-row-3">
+                            <div class="form-field">
+                                <label for="transaction-type">Type :</label>
+                                <select id="transaction-type" name="type" required>
+                                    <option value="income">Revenu divers</option>
+                                    <option value="expense">Autre dépense</option>
                                 </select>
                             </div>
-                            <div class="champ-formulaire">
-                                <label for="categorie-operation">Catégorie :</label>
-                                <select id="categorie-operation" name="categorie-operation" required>
-                                    <option value="alimentation">Alimentation</option>
+                            <div class="form-field">
+                                <label for="transaction-category">Catégorie :</label>
+                                <select id="transaction-category" name="category" required>
+                                    <option value="food">Alimentation</option>
                                     <option value="transport">Transport</option>
-                                    <option value="loisirs">Loisirs</option>
-                                    <option value="autre">Autre</option>
+                                    <option value="leisure">Loisirs</option>
+                                    <option value="other">Autre</option>
                                 </select>
                             </div>
-                            <div class="champ-formulaire">
-                                <label for="date-operation">Date :</label>
-                                <input type="date" id="date-operation" name="date-operation" required>
+                            <div class="form-field">
+                                <label for="transaction-date">Date :</label>
+                                <input type="date" id="transaction-date" name="date" required>
                             </div>
                         </div>
 
@@ -162,10 +162,10 @@
                     </form>
                 </section>
 
-                <section id="module-dernieres-operations">
+                <section id="recent-transactions-card">
                     <h2>Dernières opérations</h2>
-                    <p id="message-vide">Aucune opération pour le moment.</p>
-                    <ul id="operations"></ul>
+                    <p id="transactions-empty">Aucune opération pour le moment.</p>
+                    <ul id="transactions-list"></ul>
                 </section>
             </div>
         </div>

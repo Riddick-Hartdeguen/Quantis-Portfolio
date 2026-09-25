@@ -8,7 +8,7 @@ body {
     font-family: "Exo 2", Arial, sans-serif;
     color: #e5e7eb;
     background-color: #000000;
-    background-image: url("assets/images/fond3.jpg");
+    background-image: url("assets/images/fond2.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -27,13 +27,13 @@ header {
     justify-content: space-between;
 }
 
-.controles-entete {
+.header-controls {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-#selecteur-mois {
+#month-select {
     width: auto;
     background-color: white;
     color: #111827;
@@ -59,26 +59,26 @@ main {
     padding: 0 1rem;
 }
 
-.colonnes-app {
+.app-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.875rem;
 }
 
-.colonne-gauche,
-.colonne-droite {
+.left-column,
+.right-column {
     display: flex;
     flex-direction: column;
 }
 
-#module-revenus-charges {
+#income-expenses-card {
     display: flex;
     flex-direction: column;
 }
 
 /* Cartes de liste : flex 1 pour aligner le bas des 2 colonnes */
-#module-liste-charges,
-#module-dernieres-operations {
+#fixed-expenses-card,
+#recent-transactions-card {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -111,20 +111,20 @@ form {
     gap: 0.5rem;
 }
 
-.ligne-formulaire {
+.form-row {
     display: grid;
     gap: 0.5rem;
 }
 
-.ligne-formulaire-2 {
+.form-row-2 {
     grid-template-columns: 1fr 1fr;
 }
 
-.ligne-formulaire-3 {
+.form-row-3 {
     grid-template-columns: repeat(3, 1fr);
 }
 
-.champ-formulaire {
+.form-field {
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
@@ -174,13 +174,13 @@ button:hover {
 }
 
 /* Barre de budget */
-#progression-budget {
+#budget-progress {
     display: flex;
     align-items: center;
     gap: 0.625rem;
 }
 
-.piste-progression {
+.progress-track {
     flex: 1;
     height: 0.5rem;
     background-color: #374151;
@@ -188,37 +188,37 @@ button:hover {
     overflow: hidden;
 }
 
-.remplissage {
+.progress-fill {
     height: 100%;
     background-color: #1e3a8a;
     border-radius: 999px;
 }
 
 /* Cartes de stats */
-.cartes-stats {
+.stats-cards {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
     gap: 0.75rem;
     margin-bottom: 0.75rem;
 }
 
-.carte-stat {
+.stat-card {
     margin-bottom: 0;
 }
 
-.carte-stat h2 {
+.stat-card h2 {
     font-size: 0.875rem;
 }
 
-.solde-positif {
+.amount-positive {
     color: #22c55e;
 }
 
-.solde-negatif {
+.amount-negative {
     color: #f87171;
 }
 
-.montant-solde {
+.stat-amount {
     font-size: 1.375rem;
     font-weight: bold;
     margin: 0.375rem 0;
@@ -226,18 +226,18 @@ button:hover {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
-.carte-principale .montant-solde {
+.primary-card .stat-amount {
     font-size: 2.5rem;
 }
 
-.sous-titre-carte {
+.card-subtitle {
     margin: -0.25rem 0 0;
     font-size: 0.6875rem;
     font-style: italic;
     color: #9ca3af;
 }
 
-.detail-stat {
+.stat-detail {
     display: flex;
     justify-content: space-between;
     margin: 0.25rem 0 0;
@@ -245,14 +245,14 @@ button:hover {
     color: #d1d5db;
 }
 
-.montant-solde+.detail-stat {
+.stat-amount+.stat-detail {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     padding-top: 0.375rem;
 }
 
 /* Listes */
-#operations,
-#charges-fixes {
+#transactions-list,
+#fixed-expenses-list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -261,29 +261,29 @@ button:hover {
     scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 
-#operations::-webkit-scrollbar,
-#charges-fixes::-webkit-scrollbar {
+#transactions-list::-webkit-scrollbar,
+#fixed-expenses-list::-webkit-scrollbar {
     width: 8px;
 }
 
-#operations::-webkit-scrollbar-track,
-#charges-fixes::-webkit-scrollbar-track {
+#transactions-list::-webkit-scrollbar-track,
+#fixed-expenses-list::-webkit-scrollbar-track {
     background: transparent;
 }
 
-#operations::-webkit-scrollbar-thumb,
-#charges-fixes::-webkit-scrollbar-thumb {
+#transactions-list::-webkit-scrollbar-thumb,
+#fixed-expenses-list::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.35);
     border-radius: 999px;
 }
 
-#operations::-webkit-scrollbar-thumb:hover,
-#charges-fixes::-webkit-scrollbar-thumb:hover {
+#transactions-list::-webkit-scrollbar-thumb:hover,
+#fixed-expenses-list::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.55);
 }
 
 /* Lignes de liste, créées en JS */
-.ligne-operation {
+.list-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr auto auto;
     align-items: center;
@@ -295,27 +295,27 @@ button:hover {
     gap: 0.5rem
 }
 
-.ligne-operation button {
+.list-row button {
     padding: 0.125rem 0.3125rem;
 }
 
-.operation-revenu {
+.income-amount {
     color: #22c55e;
     font-weight: bold;
 }
 
-.operation-depense {
+.expense-amount {
     color: #f87171;
     font-weight: bold;
 }
 
-#message-vide {
+#transactions-empty {
     color: #e5e7eb;
     text-align: center;
     margin: auto 0;
 }
 
-#message-charges-vide {
+#fixed-expenses-empty {
     color: #e5e7eb;
     text-align: center;
     margin: auto 0;
@@ -337,16 +337,16 @@ button:hover {
 
 /* Petits écrans : une seule colonne */
 @media (max-width: 768px) {
-    .cartes-stats {
+    .stats-cards {
         grid-template-columns: 1fr;
     }
 
-    .ligne-formulaire-2,
-    .ligne-formulaire-3 {
+    .form-row-2,
+    .form-row-3 {
         grid-template-columns: 1fr;
     }
 
-    .colonnes-app {
+    .app-columns {
         grid-template-columns: 1fr;
     }
 

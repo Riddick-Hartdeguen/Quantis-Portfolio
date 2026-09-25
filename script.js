@@ -4,293 +4,293 @@
 // --- Montants ---
 // Stockés en centimes entiers pour éviter les erreurs d'arrondi des nombres à virgule
 
-function formaterMontant(centimes) {
-    return (centimes / 100).toFixed(2).replace(".", ",");
+function formatAmount(cents) {
+    return (cents / 100).toFixed(2).replace(".", ",");
 }
 
-const conversionCentimes = (montant) => {
-    return Math.round(Number(montant) * 100);
+const toCents = (amount) => {
+    return Math.round(Number(amount) * 100);
 };
 
 // --- Ligne de liste (charges et opérations) ---
 
-const creerLigneSupprimable = (nomValeur, dateValeur, montantValeur, liste, messageVide, supprimerLigne, type, modifierLigne) => {
-    const nouvelleLigne = document.createElement("li");
-    nouvelleLigne.classList.add("ligne-operation");
+const createListRow = (name, date, amount, list, emptyMessage, onDelete, type, onEdit) => {
+    const row = document.createElement("li");
+    row.classList.add("list-row");
 
-    const spanNom = document.createElement("span");
-    spanNom.textContent = nomValeur;
-    nouvelleLigne.appendChild(spanNom);
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = name;
+    row.appendChild(nameSpan);
 
-    const spanDate = document.createElement("span");
-    spanDate.textContent = dateValeur;
-    nouvelleLigne.appendChild(spanDate);
+    const dateSpan = document.createElement("span");
+    dateSpan.textContent = date;
+    row.appendChild(dateSpan);
 
-    const spanMontant = document.createElement("span");
-    if (type === "revenu") {
-        spanMontant.classList.add("operation-revenu");
-        spanMontant.textContent = `+ ${formaterMontant(montantValeur)} €`;
-    } else if (type === "depense") {
-        spanMontant.classList.add("operation-depense");
-        spanMontant.textContent = `- ${formaterMontant(montantValeur)} €`;
+    const amountSpan = document.createElement("span");
+    if (type === "income") {
+        amountSpan.classList.add("income-amount");
+        amountSpan.textContent = `+ ${formatAmount(amount)} €`;
+    } else if (type === "expense") {
+        amountSpan.classList.add("expense-amount");
+        amountSpan.textContent = `- ${formatAmount(amount)} €`;
     } else {
-        spanMontant.textContent = `${formaterMontant(montantValeur)} €`;
+        amountSpan.textContent = `${formatAmount(amount)} €`;
     }
-    nouvelleLigne.appendChild(spanMontant);
+    row.appendChild(amountSpan);
 
-    const boutonModifier = document.createElement("button");
-    boutonModifier.textContent = "✏️";
-    nouvelleLigne.appendChild(boutonModifier);
+    const editButton = document.createElement("button");
+    editButton.textContent = "✏️";
+    row.appendChild(editButton);
 
-    boutonModifier.addEventListener("click", function () {
-        modifierLigne();
+    editButton.addEventListener("click", function () {
+        onEdit();
     });
 
-    const boutonSupprimer = document.createElement("button");
-    boutonSupprimer.textContent = "🗑️";
-    nouvelleLigne.appendChild(boutonSupprimer);
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "🗑️";
+    row.appendChild(deleteButton);
 
-    boutonSupprimer.addEventListener("click", function () {
-        nouvelleLigne.remove();
-        supprimerLigne();
-        if (liste.children.length === 0) {
-            messageVide.style.display = "block";
+    deleteButton.addEventListener("click", function () {
+        row.remove();
+        onDelete();
+        if (list.children.length === 0) {
+            emptyMessage.style.display = "block";
         }
-        calculerSoldeDisponible();
+        calculateBalance();
     });
-    liste.appendChild(nouvelleLigne);
-    messageVide.style.display = "none";
-    calculerSoldeDisponible();
+    list.appendChild(row);
+    emptyMessage.style.display = "none";
+    calculateBalance();
 };
 
 // --- Solde et tableau de bord ---
 
-const soldeDisponible = document.getElementById("solde-actuel");
-const revenuDisponible = document.getElementById("total-revenus");
-const totalDepenses = document.getElementById("total-depenses");
-const remplissage = document.getElementById("remplissage");
-const pourcentageBudgetAffiche = document.getElementById("pourcentage-budget");
-let solde = 0;
+const balanceDisplay = document.getElementById("current-balance");
+const totalIncomeDisplay = document.getElementById("total-income");
+const totalExpensesDisplay = document.getElementById("total-expenses");
+const progressFill = document.getElementById("progress-fill");
+const budgetPercentageDisplay = document.getElementById("budget-percentage");
+let balance = 0;
 
-const calculerSoldeDisponible = () => {
-    totalDepenses.textContent = `${formaterMontant(totalChargesFixes + totalOperationsDepenses)} €`;
-    revenuDisponible.textContent = `${formaterMontant(salaire + totalOperationsRevenus)} €`;
-    solde = (salaire + totalOperationsRevenus) - (totalChargesFixes + totalOperationsDepenses);
-    soldeDisponible.textContent = solde < 0 ? `- ${formaterMontant(solde * -1)} €` : `${formaterMontant(solde)} €`;
-    if (solde > 0) {
-        soldeDisponible.style.color = "green";
-    } else if (solde < 0) {
-        soldeDisponible.style.color = "red";
+const calculateBalance = () => {
+    totalExpensesDisplay.textContent = `${formatAmount(totalFixedExpenses + totalOtherExpenses)} €`;
+    totalIncomeDisplay.textContent = `${formatAmount(salary + totalOtherIncome)} €`;
+    balance = (salary + totalOtherIncome) - (totalFixedExpenses + totalOtherExpenses);
+    balanceDisplay.textContent = balance < 0 ? `- ${formatAmount(balance * -1)} €` : `${formatAmount(balance)} €`;
+    if (balance > 0) {
+        balanceDisplay.style.color = "green";
+    } else if (balance < 0) {
+        balanceDisplay.style.color = "red";
     } else {
-        soldeDisponible.style.color = "white";
+        balanceDisplay.style.color = "white";
     }
 
     // Part du salaire entamée : 0 % tant que le solde dépasse le salaire
-    const pourcentageBudget = salaire > 0 ? Math.max(0, Math.min(100, (salaire - solde) / salaire * 100)) : 0;
-    remplissage.style.width = `${pourcentageBudget}%`;
-    pourcentageBudgetAffiche.textContent = `${Math.round(pourcentageBudget)} %`;
+    const budgetPercentage = salary > 0 ? Math.max(0, Math.min(100, (salary - balance) / salary * 100)) : 0;
+    progressFill.style.width = `${budgetPercentage}%`;
+    budgetPercentageDisplay.textContent = `${Math.round(budgetPercentage)} %`;
 
-    localStorage.setItem("salaire", JSON.stringify(salaire));
-    localStorage.setItem("chargesFixes", JSON.stringify(tableauChargesFixes));
-    localStorage.setItem("operations", JSON.stringify(tableauOperations));
+    localStorage.setItem("salary", JSON.stringify(salary));
+    localStorage.setItem("fixedExpenses", JSON.stringify(fixedExpenses));
+    localStorage.setItem("transactions", JSON.stringify(transactions));
 };
 
 // --- Hauteur des listes ---
 
-const moduleListeCharges = document.getElementById("module-liste-charges");
-const moduleDernieresOperations = document.getElementById("module-dernieres-operations");
+const fixedExpensesCard = document.getElementById("fixed-expenses-card");
+const recentTransactionsCard = document.getElementById("recent-transactions-card");
 
 // Marges en rem, variables selon l'écran : on lit les valeurs réelles
-const margesSousLaCarte = (carte) => {
-    return parseFloat(getComputedStyle(carte).marginBottom) + parseFloat(getComputedStyle(document.querySelector("main")).marginBottom);
+const getMarginsBelowCard = (card) => {
+    return parseFloat(getComputedStyle(card).marginBottom) + parseFloat(getComputedStyle(document.querySelector("main")).marginBottom);
 };
 
-const ajusterHauteurListe = (liste, carte) => {
-    const rectangle = liste.getBoundingClientRect();
-    const styleCarte = getComputedStyle(carte);
-    const espaceSousLaListe = parseFloat(styleCarte.paddingBottom) + parseFloat(styleCarte.borderBottomWidth) + margesSousLaCarte(carte);
-    const espaceDisponible = window.innerHeight - rectangle.top - espaceSousLaListe;
-    liste.style.maxHeight = Math.max(40, espaceDisponible) + "px";
+const adjustListHeight = (list, card) => {
+    const rect = list.getBoundingClientRect();
+    const cardStyle = getComputedStyle(card);
+    const spaceBelowList = parseFloat(cardStyle.paddingBottom) + parseFloat(cardStyle.borderBottomWidth) + getMarginsBelowCard(card);
+    const availableSpace = window.innerHeight - rect.top - spaceBelowList;
+    list.style.maxHeight = Math.max(40, availableSpace) + "px";
 };
 
-const ajusterHauteurCarte = (carte) => {
-    const rectangle = carte.getBoundingClientRect();
-    const espaceDisponible = window.innerHeight - rectangle.top - margesSousLaCarte(carte);
-    carte.style.maxHeight = Math.max(80, espaceDisponible) + "px";
+const adjustCardHeight = (card) => {
+    const rect = card.getBoundingClientRect();
+    const availableSpace = window.innerHeight - rect.top - getMarginsBelowCard(card);
+    card.style.maxHeight = Math.max(80, availableSpace) + "px";
 };
 
-const ajusterHauteurs = () => {
-    ajusterHauteurListe(chargesFixes, moduleListeCharges);
-    ajusterHauteurListe(operations, moduleDernieresOperations);
-    ajusterHauteurCarte(moduleListeCharges);
-    ajusterHauteurCarte(moduleDernieresOperations);
+const adjustHeights = () => {
+    adjustListHeight(fixedExpensesList, fixedExpensesCard);
+    adjustListHeight(transactionsList, recentTransactionsCard);
+    adjustCardHeight(fixedExpensesCard);
+    adjustCardHeight(recentTransactionsCard);
 };
 
-window.addEventListener("resize", ajusterHauteurs);
+window.addEventListener("resize", adjustHeights);
 
 // ===== Salaire =====
 
-const formulaireSalaire = document.getElementById("formulaire-salaire");
-const salaireMensuel = document.getElementById("salaire-mensuel");
-const salaireAffiche = document.getElementById("salaire-affiche");
-let salaire = 0;
+const salaryForm = document.getElementById("salary-form");
+const salaryInput = document.getElementById("salary-input");
+const salaryDisplay = document.getElementById("salary-display");
+let salary = 0;
 
-formulaireSalaire.addEventListener("submit", function (event) {
+salaryForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    salaire = conversionCentimes(salaireMensuel.value);
-    salaireAffiche.textContent = `${formaterMontant(salaire)} €`;
-    salaireMensuel.value = "";
+    salary = toCents(salaryInput.value);
+    salaryDisplay.textContent = `${formatAmount(salary)} €`;
+    salaryInput.value = "";
 
-    calculerSoldeDisponible();
+    calculateBalance();
 });
 
 // ===== Charges fixes =====
 
-const formulaireCharge = document.getElementById("formulaire-charge");
-const nomCharge = document.getElementById("nom-charge");
-const montantCharge = document.getElementById("montant-charge");
-const dateCharge = document.getElementById("date-charge");
-const messageChargesVide = document.getElementById("message-charges-vide");
-const chargesFixes = document.getElementById("charges-fixes");
-const chargesfixesAffiche = document.getElementById("charges-fixes-total");
-let totalChargesFixes = 0;
-let idChargeModifier = null; // null = ajout, sinon id de la charge en cours de modification
-let tableauChargesFixes = [];
+const fixedExpenseForm = document.getElementById("fixed-expense-form");
+const fixedExpenseNameInput = document.getElementById("fixed-expense-name");
+const fixedExpenseAmountInput = document.getElementById("fixed-expense-amount");
+const fixedExpenseDateInput = document.getElementById("fixed-expense-date");
+const fixedExpensesEmptyMessage = document.getElementById("fixed-expenses-empty");
+const fixedExpensesList = document.getElementById("fixed-expenses-list");
+const fixedExpensesTotalDisplay = document.getElementById("fixed-expenses-total");
+let totalFixedExpenses = 0;
+let editedFixedExpenseId = null; // null = ajout, sinon id de la charge en cours de modification
+let fixedExpenses = [];
 
-const afficherChargesFixes = () => {
-    chargesFixes.innerHTML = "";
-    totalChargesFixes = tableauChargesFixes.reduce((accumulateur, charge) => accumulateur + charge.montant, 0);
-    chargesfixesAffiche.textContent = `${formaterMontant(totalChargesFixes)} €`;
-    tableauChargesFixes.forEach(charge => {
-        creerLigneSupprimable(charge.nom, charge.date, charge.montant, chargesFixes, messageChargesVide, function () {
-            tableauChargesFixes = tableauChargesFixes.filter(c => c.id !== charge.id);
-            afficherChargesFixes();
+const renderFixedExpenses = () => {
+    fixedExpensesList.innerHTML = "";
+    totalFixedExpenses = fixedExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+    fixedExpensesTotalDisplay.textContent = `${formatAmount(totalFixedExpenses)} €`;
+    fixedExpenses.forEach(expense => {
+        createListRow(expense.name, expense.date, expense.amount, fixedExpensesList, fixedExpensesEmptyMessage, function () {
+            fixedExpenses = fixedExpenses.filter(item => item.id !== expense.id);
+            renderFixedExpenses();
         }, null, function () {
-            idChargeModifier = charge.id;
-            const chargeAmodifier = tableauChargesFixes.find(c => c.id === idChargeModifier);
-            nomCharge.value = chargeAmodifier.nom;
-            montantCharge.value = chargeAmodifier.montant / 100;
-            dateCharge.value = chargeAmodifier.date;
+            editedFixedExpenseId = expense.id;
+            const expenseToEdit = fixedExpenses.find(item => item.id === editedFixedExpenseId);
+            fixedExpenseNameInput.value = expenseToEdit.name;
+            fixedExpenseAmountInput.value = expenseToEdit.amount / 100;
+            fixedExpenseDateInput.value = expenseToEdit.date;
         });
     });
-    ajusterHauteurs();
+    adjustHeights();
 };
 
-formulaireCharge.addEventListener("submit", function (event) {
+fixedExpenseForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    const nomChargeValeur = nomCharge.value;
-    const montantChargeValeur = conversionCentimes(montantCharge.value);
-    const dateChargeValeur = dateCharge.value;
-    if (idChargeModifier === null) {
-        const nouvelleCharge = {
+    const name = fixedExpenseNameInput.value;
+    const amount = toCents(fixedExpenseAmountInput.value);
+    const date = fixedExpenseDateInput.value;
+    if (editedFixedExpenseId === null) {
+        const newExpense = {
             id: Date.now(),
-            nom: nomChargeValeur,
-            montant: montantChargeValeur,
-            date: dateChargeValeur
+            name: name,
+            amount: amount,
+            date: date
         };
-        tableauChargesFixes.push(nouvelleCharge);
+        fixedExpenses.push(newExpense);
     } else {
-        const chargeAmodifier = tableauChargesFixes.find(
-            charge => charge.id === idChargeModifier
+        const expenseToEdit = fixedExpenses.find(
+            expense => expense.id === editedFixedExpenseId
         );
-        chargeAmodifier.nom = nomChargeValeur;
-        chargeAmodifier.montant = montantChargeValeur;
-        chargeAmodifier.date = dateChargeValeur;
+        expenseToEdit.name = name;
+        expenseToEdit.amount = amount;
+        expenseToEdit.date = date;
     };
 
-    idChargeModifier = null;
-    formulaireCharge.reset();
-    afficherChargesFixes();
+    editedFixedExpenseId = null;
+    fixedExpenseForm.reset();
+    renderFixedExpenses();
 });
 
 // ===== Opérations =====
 
-const iconsCategorie = {
-    "alimentation": "🍎",
+const categoryIcons = {
+    "food": "🍎",
     "transport": "🚗",
-    "loisirs": "🎨",
-    "autre": "❓"
+    "leisure": "🎨",
+    "other": "❓"
 };
 
-const formulaireOperation = document.getElementById("formulaire-operation");
-const nomOperation = document.getElementById("nom-operation");
-const montantOperation = document.getElementById("montant-operation");
-const typeOperation = document.getElementById("type-operation");
-const categorieOperation = document.getElementById("categorie-operation");
-const dateOperation = document.getElementById("date-operation");
-const messageVide = document.getElementById("message-vide");
-const operations = document.getElementById("operations");
-const depensesMensuellesAffiche = document.getElementById("depenses-mensuelles");
-let totalOperationsDepenses = 0;
-let totalOperationsRevenus = 0;
-let tableauOperations = [];
-let idOperationModifier = null;
+const transactionForm = document.getElementById("transaction-form");
+const transactionNameInput = document.getElementById("transaction-name");
+const transactionAmountInput = document.getElementById("transaction-amount");
+const transactionTypeSelect = document.getElementById("transaction-type");
+const transactionCategorySelect = document.getElementById("transaction-category");
+const transactionDateInput = document.getElementById("transaction-date");
+const transactionsEmptyMessage = document.getElementById("transactions-empty");
+const transactionsList = document.getElementById("transactions-list");
+const otherExpensesDisplay = document.getElementById("other-expenses");
+let totalOtherExpenses = 0;
+let totalOtherIncome = 0;
+let transactions = [];
+let editedTransactionId = null;
 
-const afficherOperations = () => {
-    operations.innerHTML = "";
-    totalOperationsRevenus = tableauOperations.reduce((accumulateur, operation) => {
-        return operation.type === "revenu" ? accumulateur + operation.montant : accumulateur;
+const renderTransactions = () => {
+    transactionsList.innerHTML = "";
+    totalOtherIncome = transactions.reduce((sum, transaction) => {
+        return transaction.type === "income" ? sum + transaction.amount : sum;
     }, 0);
-    totalOperationsDepenses = tableauOperations.reduce((accumulateur, operation) => {
-        return operation.type === "depense" ? accumulateur + operation.montant : accumulateur;
+    totalOtherExpenses = transactions.reduce((sum, transaction) => {
+        return transaction.type === "expense" ? sum + transaction.amount : sum;
     }, 0);
-    depensesMensuellesAffiche.textContent = `${formaterMontant(totalOperationsDepenses)} €`;
-    tableauOperations.forEach(operation => {
-        creerLigneSupprimable(`${iconsCategorie[operation.categorie]} ${operation.nom}`, operation.date, operation.montant, operations, messageVide, function () {
-            tableauOperations = tableauOperations.filter(op => op.id !== operation.id);
-            afficherOperations();
-        }, operation.type, function () {
-            idOperationModifier = operation.id;
-            const operationAmodifier = tableauOperations.find(c => c.id === idOperationModifier);
-            nomOperation.value = operationAmodifier.nom;
-            montantOperation.value = operationAmodifier.montant / 100;
-            typeOperation.value = operationAmodifier.type;
-            categorieOperation.value = operationAmodifier.categorie;
-            dateOperation.value = operationAmodifier.date;
+    otherExpensesDisplay.textContent = `${formatAmount(totalOtherExpenses)} €`;
+    transactions.forEach(transaction => {
+        createListRow(`${categoryIcons[transaction.category]} ${transaction.name}`, transaction.date, transaction.amount, transactionsList, transactionsEmptyMessage, function () {
+            transactions = transactions.filter(item => item.id !== transaction.id);
+            renderTransactions();
+        }, transaction.type, function () {
+            editedTransactionId = transaction.id;
+            const transactionToEdit = transactions.find(item => item.id === editedTransactionId);
+            transactionNameInput.value = transactionToEdit.name;
+            transactionAmountInput.value = transactionToEdit.amount / 100;
+            transactionTypeSelect.value = transactionToEdit.type;
+            transactionCategorySelect.value = transactionToEdit.category;
+            transactionDateInput.value = transactionToEdit.date;
         });
     });
-    ajusterHauteurs();
+    adjustHeights();
 };
 
-formulaireOperation.addEventListener("submit", function (event) {
+transactionForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    const nomOperationValeur = nomOperation.value;
-    const montantOperationValeur = conversionCentimes(montantOperation.value);
-    const typeOperationValeur = typeOperation.value;
-    const categorieOperationValeur = categorieOperation.value;
-    const dateOperationValeur = dateOperation.value;
-    if (idOperationModifier === null) {
-        const nouvelleOperation = {
+    const name = transactionNameInput.value;
+    const amount = toCents(transactionAmountInput.value);
+    const type = transactionTypeSelect.value;
+    const category = transactionCategorySelect.value;
+    const date = transactionDateInput.value;
+    if (editedTransactionId === null) {
+        const newTransaction = {
             id: Date.now(),
-            nom: nomOperationValeur,
-            montant: montantOperationValeur,
-            type: typeOperationValeur,
-            categorie: categorieOperationValeur,
-            date: dateOperationValeur,
+            name: name,
+            amount: amount,
+            type: type,
+            category: category,
+            date: date,
         };
-        tableauOperations.push(nouvelleOperation);
+        transactions.push(newTransaction);
     } else {
-        const operationAmodifier = tableauOperations.find(operation => operation.id === idOperationModifier);
-        operationAmodifier.nom = nomOperationValeur;
-        operationAmodifier.montant = montantOperationValeur;
-        operationAmodifier.type = typeOperationValeur;
-        operationAmodifier.categorie = categorieOperationValeur;
-        operationAmodifier.date = dateOperationValeur;
+        const transactionToEdit = transactions.find(transaction => transaction.id === editedTransactionId);
+        transactionToEdit.name = name;
+        transactionToEdit.amount = amount;
+        transactionToEdit.type = type;
+        transactionToEdit.category = category;
+        transactionToEdit.date = date;
     };
-    idOperationModifier = null;
-    formulaireOperation.reset();
-    afficherOperations();
+    editedTransactionId = null;
+    transactionForm.reset();
+    renderTransactions();
 });
 
 // ===== Initialisation =====
 // En dernier : le premier affichage utilise les variables de toutes les sections
 
-tableauChargesFixes = JSON.parse(localStorage.getItem("chargesFixes")) || [];
-tableauOperations = JSON.parse(localStorage.getItem("operations")) || [];
-salaire = JSON.parse(localStorage.getItem("salaire")) || 0;
+fixedExpenses = JSON.parse(localStorage.getItem("fixedExpenses")) || [];
+transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+salary = JSON.parse(localStorage.getItem("salary")) || 0;
 
-salaireAffiche.textContent = `${formaterMontant(salaire)} €`;
-afficherChargesFixes();
-afficherOperations();
-calculerSoldeDisponible();
+salaryDisplay.textContent = `${formatAmount(salary)} €`;
+renderFixedExpenses();
+renderTransactions();
+calculateBalance();
