@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <title>Gestionnaire de Budget</title>
+</head>
+
+<body>
+    <header>
+        <div class="titre-entete">
+            <h1>Quantis</h1>
+            <p>Votre gestionnaire de budget !</p>
+        </div>
+
+        <div class="controles-entete">
+            <select id="selecteur-mois" disabled>
+                <option value="2026-07">Juillet 2026</option>
+                <option value="2026-08">Août 2026</option>
+                <option value="2026-09" selected>Septembre 2026</option>
+            </select>
+
+        </div>
+    </header>
+
+    <main>
+        <div class="cartes-stats">
+            <section id="carte-solde" class="carte-stat carte-principale">
+                <h2>Solde disponible</h2>
+                <p class="montant-solde solde-positif">
+                    <span id="solde-actuel">0,00 €</span>
+                </p>
+            </section>
+
+            <section id="carte-revenus" class="carte-stat">
+                <h2>Revenus du mois</h2>
+                <p class="sous-titre-carte">(Salaire + revenus divers)</p>
+                <p class="montant-solde solde-positif">
+                    <span id="total-revenus">0,00 €</span>
+                </p>
+                <p class="detail-stat">
+                    <span>dont salaire</span>
+                    <span id="salaire-affiche">0,00 €</span>
+                </p>
+            </section>
+
+            <section id="carte-depenses" class="carte-stat">
+                <h2>Dépenses du mois</h2>
+                <p class="sous-titre-carte">(Charges fixes + autres dépenses)</p>
+                <p class="montant-solde solde-negatif">
+                    <span id="total-depenses">0,00 €</span>
+                </p>
+                <p class="detail-stat">
+                    <span>Charges fixes</span>
+                    <span id="charges-fixes-total">0,00 €</span>
+                </p>
+                <p class="detail-stat">
+                    <span>Autres dépenses</span>
+                    <span id="depenses-mensuelles">0,00 €</span>
+                </p>
+            </section>
+        </div>
+
+        <section id="progression-budget">
+            <span>Budget mensuel utilisé</span>
+            <div class="piste-progression">
+                <div class="remplissage" id="remplissage" style="width: 0%;"></div>
+            </div>
+            <span id="pourcentage-budget">0 %</span>
+        </section>
+
+        <div class="colonnes-app">
+            <div class="colonne-gauche">
+                <section id="module-revenus-charges">
+                    <h2>Revenus et charges fixes</h2>
+
+                    <form id="formulaire-salaire">
+
+                        <label for="salaire-mensuel">Entrez votre salaire mensuel :</label>
+                        <input type="number" id="salaire-mensuel" name="salaire-mensuel" min="0" step="0.01" required>
+
+                        <button type="submit">Enregistrer le salaire</button>
+
+                    </form>
+
+                    <h3>Charges fixes mensuelles</h3>
+
+                    <form id="formulaire-charge">
+                        <div class="ligne-formulaire ligne-formulaire-3">
+                            <div class="champ-formulaire">
+                                <label for="nom-charge">Nom de la charge :</label>
+                                <input type="text" id="nom-charge" name="nom-charge" required>
+                            </div>
+                            <div class="champ-formulaire">
+                                <label for="montant-charge">Montant :</label>
+                                <input type="number" id="montant-charge" name="montant-charge" min="0.01"
+                                    step="0.01" required>
+                            </div>
+                            <div class="champ-formulaire">
+                                <label for="date-charge">Date :</label>
+                                <input type="date" id="date-charge" name="date-charge" required>
+                            </div>
+                        </div>
+
+                        <button type="submit">Ajouter la charge fixe</button>
+                    </form>
+                </section>
+
+                <section id="module-liste-charges">
+                    <h2>Liste des charges fixes</h2>
+                    <p id="message-charges-vide">Aucune charge fixe pour le moment.</p>
+                    <ul id="charges-fixes"></ul>
+                </section>
+            </div>
+
+            <div class="colonne-droite">
+                <section id="module-operations">
+                    <h2>Opérations du mois</h2>
+
+                    <form id="formulaire-operation">
+                        <div class="ligne-formulaire ligne-formulaire-2">
+                            <div class="champ-formulaire">
+                                <label for="nom-operation">Nom de l'opération :</label>
+                                <input type="text" id="nom-operation" name="nom-operation" required>
+                            </div>
+                            <div class="champ-formulaire">
+                                <label for="montant-operation">Montant :</label>
+                                <input type="number" id="montant-operation" name="montant-operation" min="0.01"
+                                    step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="ligne-formulaire ligne-formulaire-3">
+                            <div class="champ-formulaire">
+                                <label for="type-operation">Type :</label>
+                                <select id="type-operation" name="type-operation" required>
+                                    <option value="revenu">Revenu divers</option>
+                                    <option value="depense">Autre dépense</option>
+                                </select>
+                            </div>
+                            <div class="champ-formulaire">
+                                <label for="categorie-operation">Catégorie :</label>
+                                <select id="categorie-operation" name="categorie-operation" required>
+                                    <option value="alimentation">Alimentation</option>
+                                    <option value="transport">Transport</option>
+                                    <option value="loisirs">Loisirs</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                            <div class="champ-formulaire">
+                                <label for="date-operation">Date :</label>
+                                <input type="date" id="date-operation" name="date-operation" required>
+                            </div>
+                        </div>
+
+                        <button type="submit">Ajouter l'opération</button>
+                    </form>
+                </section>
+
+                <section id="module-dernieres-operations">
+                    <h2>Dernières opérations</h2>
+                    <p id="message-vide">Aucune opération pour le moment.</p>
+                    <ul id="operations"></ul>
+                </section>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
