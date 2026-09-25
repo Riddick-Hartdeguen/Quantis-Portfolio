@@ -1,4 +1,4 @@
-# Quantis
+# Quantis MVP
 
 Application web de gestion de budget personnel, développée en HTML, CSS et JavaScript natif, sans framework ni dépendance.
 
