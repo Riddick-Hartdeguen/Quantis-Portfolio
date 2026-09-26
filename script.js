@@ -119,9 +119,12 @@ const adjustCardHeight = (card) => {
     card.style.maxHeight = Math.max(80, availableSpace) + "px";
 };
 
+// Même condition que la media query « une seule colonne » de style.css
+const singleColumnLayout = "(max-width: 1600px), (hover: none) and (pointer: coarse)";
+
 const adjustHeights = () => {
-    // Une colonne (≤ 768px) : la page défile, la hauteur des listes est fixée en CSS
-    if (window.innerWidth <= 768) {
+    // Une colonne : la page défile, la hauteur des listes est fixée en CSS
+    if (window.matchMedia(singleColumnLayout).matches) {
         [fixedExpensesList, transactionsList, fixedExpensesCard, recentTransactionsCard].forEach(element => element.style.maxHeight = "");
         return;
     }

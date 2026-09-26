@@ -321,22 +321,19 @@ button:hover {
     margin: auto 0;
 }
 
-/* Taille de base réduite si la fenêtre est peu haute : la page fait environ 56rem de haut */
+/* Taille de base réduite si la fenêtre est peu haute */
 @media (min-width: 769px) {
     html {
         font-size: min(16px, 100vh / 56);
     }
 }
 
-/* Portables et tablettes */
-@media (min-width: 769px) and (max-width: 1600px) {
+/* Une seule colonne */
+@media (max-width: 1600px), (hover: none) and (pointer: coarse) {
     html {
-        font-size: min(9px, 100vh / 56);
+        font-size: 100%;
     }
-}
 
-/* Petits écrans : une seule colonne */
-@media (max-width: 768px) {
     .stats-cards {
         grid-template-columns: 1fr;
     }
@@ -366,6 +363,7 @@ button:hover {
     }
 
     main {
+        max-width: 60rem;
         margin: 1.25rem auto;
         padding: 0 1rem;
     }
@@ -374,9 +372,16 @@ button:hover {
         padding: 1.25rem;
     }
 
-    /* Environ 5 lignes visibles avant le défilement de la liste */
+    /* lignes visibles avant le défilement de la liste */
     #transactions-list,
     #fixed-expenses-list {
         max-height: 12.5rem;
+    }
+}
+
+/* Une colonne réduite à la souris */
+@media (min-width: 769px) and (max-width: 1600px) and (hover: hover) {
+    html {
+        font-size: 70%;
     }
 }
