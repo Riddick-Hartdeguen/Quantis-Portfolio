@@ -109,13 +109,13 @@ const adjustListHeight = (list, card) => {
     const rect = list.getBoundingClientRect();
     const cardStyle = getComputedStyle(card);
     const spaceBelowList = parseFloat(cardStyle.paddingBottom) + parseFloat(cardStyle.borderBottomWidth) + getMarginsBelowCard(card);
-    const availableSpace = window.innerHeight - rect.top - spaceBelowList;
+    const availableSpace = window.innerHeight - (rect.top + window.scrollY) - spaceBelowList;
     list.style.maxHeight = Math.max(40, availableSpace) + "px";
 };
 
 const adjustCardHeight = (card) => {
     const rect = card.getBoundingClientRect();
-    const availableSpace = window.innerHeight - rect.top - getMarginsBelowCard(card);
+    const availableSpace = window.innerHeight - (rect.top + window.scrollY) - getMarginsBelowCard(card);
     card.style.maxHeight = Math.max(80, availableSpace) + "px";
 };
 
