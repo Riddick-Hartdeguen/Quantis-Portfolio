@@ -374,3 +374,10 @@ button:hover {
         padding: 1.25rem;
     }
 }
+
+/* Téléphones : background-attachment: fixed provoque des saccades au scroll sur certains navigateurs mobiles */
+@media (max-width: 480px) {
+    body {
+        background-attachment: scroll;
+    }
+}
