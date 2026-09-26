@@ -373,4 +373,10 @@ button:hover {
     section {
         padding: 1.25rem;
     }
+
+    /* Environ 5 lignes visibles avant le défilement de la liste */
+    #transactions-list,
+    #fixed-expenses-list {
+        max-height: 12.5rem;
+    }
 }

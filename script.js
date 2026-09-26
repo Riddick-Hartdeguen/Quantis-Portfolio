@@ -120,6 +120,11 @@ const adjustCardHeight = (card) => {
 };
 
 const adjustHeights = () => {
+    // Une colonne (≤ 768px) : la page défile, la hauteur des listes est fixée en CSS
+    if (window.innerWidth <= 768) {
+        [fixedExpensesList, transactionsList, fixedExpensesCard, recentTransactionsCard].forEach(element => element.style.maxHeight = "");
+        return;
+    }
     adjustListHeight(fixedExpensesList, fixedExpensesCard);
     adjustListHeight(transactionsList, recentTransactionsCard);
     adjustCardHeight(fixedExpensesCard);
