@@ -120,7 +120,7 @@ const adjustCardHeight = (card) => {
 };
 
 // Même condition que la media query « une seule colonne » de style.css
-const singleColumnLayout = "(max-width: 1600px), (hover: none) and (pointer: coarse)";
+const singleColumnLayout = "(max-width: 1400px), (hover: none) and (pointer: coarse)";
 
 const adjustHeights = () => {
     // Une colonne : la page défile, la hauteur des listes est fixée en CSS

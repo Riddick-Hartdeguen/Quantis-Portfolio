@@ -329,7 +329,7 @@ button:hover {
 }
 
 /* Une seule colonne */
-@media (max-width: 1600px), (hover: none) and (pointer: coarse) {
+@media (max-width: 1400px), (hover: none) and (pointer: coarse) {
     html {
         font-size: 100%;
     }
@@ -380,7 +380,7 @@ button:hover {
 }
 
 /* Une colonne réduite à la souris */
-@media (min-width: 769px) and (max-width: 1600px) and (hover: hover) {
+@media (min-width: 769px) and (max-width: 1400px) and (hover: hover) {
     html {
         font-size: 70%;
     }
