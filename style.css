@@ -2,7 +2,7 @@
 :root {
     --font: "Exo 2", Arial, sans-serif;
     /* image de fond, partagée par la page et l'intérieur des cadres */
-    --background-image: url("assets/images/fond1.jpg");
+    --background-image: url("assets/images/fond3.jpg");
     --glass-border: 1px solid rgba(255, 255, 255, 0.3);
     --card-radius: 1.5rem;
     --card-padding: 0.875rem;
