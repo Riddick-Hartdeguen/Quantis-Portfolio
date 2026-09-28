@@ -1,3 +1,36 @@
+/* Valeurs communes du verre et du texte */
+:root {
+    --font: "Exo 2", Arial, sans-serif;
+    /* image de fond, partagée par la page et l'intérieur des cadres */
+    --background-image: url("assets/images/fond1.jpg");
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    --card-radius: 1.5rem;
+    --card-padding: 0.875rem;
+    /* néon : lueur serrée + lueur large, dehors et dedans */
+    --halo: 0 0 0.4rem rgba(255, 255, 255, 0.16), 0 0 1.5rem rgba(255, 255, 255, 0.06);
+    --inner-glow: inset 0 0 0.75rem rgba(255, 255, 255, 0.07);
+    /* double cadre : écart entre les deux traits, cartouche du titre */
+    --frame-gap: 0.375rem;
+    --inner-frame-radius: calc(var(--card-radius) - var(--frame-gap));
+    --inner-frame-border: 1px solid rgba(255, 255, 255, 0.14);
+    --title-band-spacing: 0.625rem;
+    /* verre : un seul flou et une seule teinte sombre pour toute la fenêtre */
+    --card-blur: blur(3px);
+    --card-bg: rgba(10, 12, 18, 0.25);
+    /* verre très léger à l'intérieur du cadre : voile clair + petit flou */
+    --inner-frame-bg: rgba(255, 255, 255, 0.04);
+    --inner-frame-blur: blur(1px);
+    --reflection: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    --text-zone-bg: rgba(10, 12, 18, 0.45);
+    --text-zone-border: 1px solid rgba(255, 255, 255, 0.06);
+    --text-zone-radius: 0.75rem;
+    /* texte un peu transparent, comme du verre poli */
+    --glass-text: rgba(255, 255, 255, 0.85);
+    --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.3);
+    /* halo sombre autour des lettres, pour le texte posé sur l'image nette */
+    --readability-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.7), 0 0 12px rgba(0, 0, 0, 0.45);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,10 +38,10 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: "Exo 2", Arial, sans-serif;
+    font-family: var(--font);
     color: #e5e7eb;
     background-color: #000000;
-    background-image: url("assets/images/fond3.jpg");
+    background-image: var(--background-image);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -71,37 +104,127 @@ main {
     flex-direction: column;
 }
 
-#income-expenses-card {
-    display: flex;
-    flex-direction: column;
-}
-
 /* Cartes de liste : flex 1 pour aligner le bas des 2 colonnes */
 #fixed-expenses-card,
 #recent-transactions-card {
     flex: 1;
-    display: flex;
-    flex-direction: column;
     min-height: 15vh;
+    /* la ligne de la liste prend toute la place restante */
+    grid-template-rows: auto 1fr;
 }
 
-/* Cartes */
-section {
-    background-color: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(4px) saturate(100%);
-    -webkit-backdrop-filter: blur(4px) saturate(100%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 1rem;
-    padding: 0.875rem;
+/* Message vide et liste sur la même ligne : un seul des deux est visible */
+#fixed-expenses-card > :not(h2),
+#recent-transactions-card > :not(h2) {
+    grid-row: 2;
+}
+
+/* Fenêtres : verre uniforme, contour néon, double cadre */
+/* .window : même rendu pour un élément qui n'est pas une section (future modale) */
+/* Le flou est posé une seule fois, sur la carte : aucun raccord ni dégradé à l'intérieur */
+section,
+.window {
+    position: relative;
+    /* le cadre intérieur en z-index -1 reste dans la carte, sous le contenu */
+    isolation: isolate;
+    /* grille : chaque enfant sur sa ligne, le titre toujours sur la 1re */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    background-color: var(--card-bg);
+    backdrop-filter: var(--card-blur);
+    -webkit-backdrop-filter: var(--card-blur);
+    border: var(--glass-border);
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
     margin-bottom: 0.875rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: var(--halo), var(--inner-glow), var(--reflection);
 }
 
-section h2 {
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    color: #e5e7eb;
+section h2,
+.window h2 {
+    margin: calc(var(--title-band-spacing) - var(--card-padding)) 0 calc(var(--card-padding) - var(--frame-gap));
+    padding-bottom: var(--title-band-spacing);
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+/* Cadre intérieur : du bas du titre jusqu'au bas de la carte, suit la hauteur réelle */
+/* Le cartouche et l'anneau autour sont simplement le fond de la carte */
+section::before,
+section::after,
+.window::before,
+.window::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    grid-row: 2 / auto;
+    top: calc(var(--frame-gap) - var(--card-padding));
+    left: var(--frame-gap);
+    right: var(--frame-gap);
+    bottom: var(--frame-gap);
+    border-radius: var(--inner-frame-radius);
+    pointer-events: none;
+}
+
+/* ::before : le fond de la page repeint à l'intérieur du cadre, avec un verre très léger */
+section::before,
+.window::before {
+    background:
+        linear-gradient(var(--inner-frame-bg), var(--inner-frame-bg)),
+        var(--background-image) center / cover no-repeat fixed;
+    filter: var(--inner-frame-blur);
+}
+
+/* ::after : le trait du cadre, à part pour rester net malgré le flou */
+section::after,
+.window::after {
+    border: var(--inner-frame-border);
+}
+
+/* Revenus et Dépenses : le sous-titre fait partie du cartouche */
+#income-card h2,
+#expenses-card h2 {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#income-card::before,
+#income-card::after,
+#expenses-card::before,
+#expenses-card::after {
+    grid-row: 3 / auto;
+}
+
+/* Budget : cadre simple, sans double cadre */
+#budget-progress::before,
+#budget-progress::after {
+    content: none;
+}
+
+/* Zones de texte : fond sombre translucide, sans flou propre (le flou est celui de la carte) */
+.list-row {
+    background-color: var(--text-zone-bg);
+    border: var(--text-zone-border);
+    border-radius: var(--text-zone-radius);
+    color: var(--glass-text);
+    text-shadow: var(--text-shadow);
+}
+
+section h2,
+section h3 {
+    color: var(--glass-text);
+    text-shadow: var(--text-shadow);
+}
+
+/* Texte à l'intérieur du cadre, sans verre derrière */
+section h3,
+label,
+.stat-amount,
+.stat-detail,
+#transactions-empty,
+#fixed-expenses-empty {
+    text-shadow: var(--readability-shadow);
 }
 
 /* Formulaires */
@@ -132,7 +255,6 @@ form {
 
 label {
     font-weight: bold;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 input,
@@ -148,7 +270,7 @@ button {
 input,
 select {
     width: 100%;
-    background-color: rgba(18, 22, 28, 0.55);
+    background-color: var(--text-zone-bg);
     color: #e5e7eb;
 }
 
@@ -159,9 +281,7 @@ select:focus {
 }
 
 button {
-    background-color: rgba(30, 58, 138, 0.35);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background-color: rgba(30, 58, 138, 0.75);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
@@ -170,7 +290,7 @@ button {
 }
 
 button:hover {
-    background-color: rgba(30, 58, 138, 0.55);
+    background-color: rgba(30, 58, 138, 0.9);
 }
 
 /* Barre de budget */
@@ -223,15 +343,16 @@ button:hover {
     font-weight: bold;
     margin: 0.375rem 0;
     color: #f9fafb;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .primary-card .stat-amount {
     font-size: 2.5rem;
 }
 
+/* Sous-titre dans le cartouche */
 .card-subtitle {
-    margin: -0.25rem 0 0;
+    margin: 0.25rem 0 calc(var(--card-padding) - var(--frame-gap));
+    padding-bottom: var(--title-band-spacing);
     font-size: 0.6875rem;
     font-style: italic;
     color: #9ca3af;
@@ -288,9 +409,6 @@ button:hover {
     grid-template-columns: 2fr 1fr 1fr auto auto;
     align-items: center;
     padding: 0.25rem 0.625rem;
-    border-radius: 0.5rem;
-    background-color: rgba(17, 24, 39, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.06);
     margin-bottom: 0.1875rem;
     gap: 0.5rem
 }
@@ -368,8 +486,8 @@ button:hover {
         padding: 0 1rem;
     }
 
-    section {
-        padding: 1.25rem;
+    :root {
+        --card-padding: 1.25rem;
     }
 
     /* lignes visibles avant le défilement de la liste */
