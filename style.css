@@ -415,6 +415,16 @@ button:hover {
 
 .list-row button {
     padding: 0.125rem 0.3125rem;
+    /* icône centrée dans le bouton */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* icône en rem : elle suit la taille du texte selon l'écran */
+.list-row button svg {
+    width: 1rem;
+    height: 1rem;
 }
 
 .income-amount {
@@ -494,6 +504,14 @@ button:hover {
     #transactions-list,
     #fixed-expenses-list {
         max-height: 12.5rem;
+    }
+}
+
+/* Écran tactile : zone de clic de 44px au doigt, l'icône garde sa taille */
+@media (hover: none) and (pointer: coarse) {
+    .list-row button {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
     }
 }
 
