@@ -163,7 +163,21 @@
                 </section>
 
                 <section id="recent-transactions-card">
-                    <h2>Dernières opérations</h2>
+                    <div class="card-header">
+                        <h2>Dernières opérations</h2>
+                        <select id="category-filter" aria-label="Filtrer par catégorie">
+                            <option value="all">Toutes</option>
+                            <option value="food">Alimentation</option>
+                            <option value="transport">Transport</option>
+                            <option value="leisure">Loisirs</option>
+                            <option value="other">Autre</option>
+                            <option value="income">Revenus divers</option>
+                        </select>
+                    </div>
+                    <p id="category-total" class="stat-detail">
+                        <span id="category-total-label"></span>
+                        <span id="category-total-amount">0,00 €</span>
+                    </p>
                     <p id="transactions-empty">Aucune opération pour le moment.</p>
                     <ul id="transactions-list"></ul>
                 </section>

@@ -240,12 +240,17 @@ const transactionDateInput = document.getElementById("transaction-date");
 const transactionsEmptyMessage = document.getElementById("transactions-empty");
 const transactionsList = document.getElementById("transactions-list");
 const otherExpensesDisplay = document.getElementById("other-expenses");
+const categoryFilter = document.getElementById("category-filter");
+const categoryTotalAmount = document.getElementById("category-total-amount");
+const categoryTotalLabel = document.getElementById("category-total-label");
 let totalOtherExpenses = 0;
 let totalOtherIncome = 0;
 let transactions = [];
 let editedTransactionId = null;
+let categoryTotal = 0;
 
 const renderTransactions = () => {
+    const selectedCategory = categoryFilter.value;
     transactionsList.innerHTML = "";
     totalOtherIncome = transactions.reduce((sum, transaction) => {
         return transaction.type === "income" ? sum + transaction.amount : sum;
@@ -254,7 +259,41 @@ const renderTransactions = () => {
         return transaction.type === "expense" ? sum + transaction.amount : sum;
     }, 0);
     otherExpensesDisplay.textContent = `${formatAmount(totalOtherExpenses)} €`;
-    transactions.forEach(transaction => {
+
+    // Filtre par catégorie
+    let filteredTransactions;
+    if (selectedCategory === "all") {
+        // tout afficher
+        filteredTransactions = transactions;
+    } else if (selectedCategory === "income") {
+        // les opérations dont le type est revenu
+        filteredTransactions = transactions.filter(transaction => transaction.type === "income");
+    } else {
+        // les dépenses de la catégorie choisie
+        filteredTransactions = transactions.filter(transaction => transaction.category === selectedCategory && transaction.type === "expense");
+    }
+
+    if (filteredTransactions.length === 0) {
+        transactionsEmptyMessage.style.display = "block";
+    }
+
+    // Total selon le filtre
+    categoryTotal = filteredTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+    if (selectedCategory === "all") {
+        categoryTotalLabel.textContent = "Dont total des opérations de dépenses :";
+        categoryTotalAmount.textContent = `${formatAmount(totalOtherExpenses)} €`;
+    } else if (selectedCategory === "income") {
+        categoryTotalLabel.textContent = "Total des revenus divers :";
+        categoryTotalAmount.textContent = `${formatAmount(totalOtherIncome)} €`;
+    } else {
+        const categoryName = categoryFilter.options[categoryFilter.selectedIndex].text.toLowerCase();
+        categoryTotalLabel.textContent = `Total des dépenses ${categoryName} :`;
+        categoryTotalAmount.textContent = `${formatAmount(categoryTotal)} €`;
+    }
+
+    // Même si la liste est vide
+    calculateBalance();
+    filteredTransactions.forEach(transaction => {
         createListRow(`${categoryIcons[transaction.category]} ${transaction.name}`, transaction.date, transaction.amount, transactionsList, transactionsEmptyMessage, function () {
             transactions = transactions.filter(item => item.id !== transaction.id);
             renderTransactions();
@@ -298,6 +337,12 @@ transactionForm.addEventListener("submit", function (event) {
     };
     editedTransactionId = null;
     transactionForm.reset();
+    renderTransactions();
+});
+
+// --- Filtre par catégorie ---
+
+categoryFilter.addEventListener("change", function () {
     renderTransactions();
 });
 
