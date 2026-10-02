@@ -1,6 +1,11 @@
 
 // ===== Commun =====
 
+// --- Capitalisation de la première lettre d'une chaîne de caractères ---
+const capitalizeFirstLetter = (text) => {
+    return text[0].toUpperCase() + text.slice(1);
+};
+
 // --- Montants ---
 // Stockés en centimes entiers pour éviter les erreurs d'arrondi des nombres à virgule
 
@@ -197,7 +202,7 @@ const renderFixedExpenses = () => {
 
 fixedExpenseForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    const name = fixedExpenseNameInput.value;
+    const name = capitalizeFirstLetter(fixedExpenseNameInput.value);
     const amount = toCents(fixedExpenseAmountInput.value);
     const date = fixedExpenseDateInput.value;
     if (editedFixedExpenseId === null) {
@@ -312,7 +317,7 @@ const renderTransactions = () => {
 
 transactionForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    const name = transactionNameInput.value;
+    const name = capitalizeFirstLetter(transactionNameInput.value);
     const amount = toCents(transactionAmountInput.value);
     const type = transactionTypeSelect.value;
     const category = transactionCategorySelect.value;
