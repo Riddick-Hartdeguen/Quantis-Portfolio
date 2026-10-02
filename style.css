@@ -566,3 +566,33 @@ button:hover {
         font-size: 70%;
     }
 }
+
+/* Téléphone : fond fixe, cartes sans flou */
+@media (max-width: 768px) {
+    body {
+        background-image: none;
+    }
+
+    /* lvh : ne change pas quand la barre du navigateur disparaît */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100lvh;
+        background: var(--background-image) center / cover no-repeat;
+        z-index: -1;
+    }
+
+    section,
+    .window {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    section::before,
+    .window::before {
+        content: none;
+    }
+}
