@@ -56,3 +56,5 @@ La police est chargée depuis Google Fonts. Sans connexion internet, l'applicati
 Les prochaines versions sont décrites dans [ROADMAP.md](ROADMAP.md).
 
 > Les crédits et sources des ressources externes utilisées dans le projet sont disponibles dans [CREDITS.md](./CREDITS.md).
+
+© 2026 Jonathan Fradet — tous droits réservés. Code publié pour consultation uniquement, voir [LICENSE](LICENSE).
