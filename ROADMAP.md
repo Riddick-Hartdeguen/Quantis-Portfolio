@@ -18,7 +18,7 @@ Quantis évolue par étapes, d'une application qui fonctionne entièrement dans 
 ## V3 : API et base de données
 
 - Création d'une API avec Node.js et Express.
-- Stockage des données dans une base MongoDB.
+- Stockage des données dans une base PostgreSQL.
 
 ## V4 : comptes utilisateurs
 

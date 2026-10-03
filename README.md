@@ -13,6 +13,7 @@ L'utilisateur saisit son salaire, ses charges fixes et ses opérations du mois. 
   - revenus du mois (salaire + revenus divers) ;
   - dépenses du mois (charges fixes + autres dépenses) ;
   - solde disponible, affiché en vert s'il est positif et en rouge s'il est négatif.
+- **Filtre par catégorie** : la liste des opérations peut être filtrée par catégorie ou sur les revenus divers, avec le total correspondant.
 - **Budget mensuel utilisé** : barre de progression indiquant la part du salaire déjà consommée.
 - **Sauvegarde automatique** : les données sont enregistrées dans le navigateur (`localStorage`) et retrouvées au rechargement de la page.
 - **Interface responsive** : l'affichage s'adapte à la largeur et à la hauteur de la fenêtre, de l'ordinateur à la tablette ; les listes défilent à l'intérieur de leur carte plutôt que la page entière.
